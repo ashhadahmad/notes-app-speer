@@ -1,8 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/", (req, res) => res.json(200, { message: "hello from api" }));
+const passport = require("passport");
+const { searchNotes } = require("../../controller/api/notes.controller");
+
 router.use("/auth", require("./auth.routes"));
 router.use("/notes", require("./notes.routes"));
+router.get(
+  "/search",
+  passport.authenticate("jwt", { session: false }),
+  searchNotes
+);
 
 module.exports = router;

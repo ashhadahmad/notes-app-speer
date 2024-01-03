@@ -165,6 +165,32 @@ const shareNoteById = async (req, res) => {
   }
 };
 
+const searchNotes = async (req, res) => {
+  try {
+    const searchText = req.query.q;
+    if (!searchText) {
+      return res
+        .status(400)
+        .json({ message: "Missing search query parameter" });
+    }
+
+    const searchResult = await Note.find()
+      .or([{ user: req.user._id }, { shared: req.user._id }])
+      .and([{ $text: { $search: searchText } }])
+      .sort({ score: { $meta: "textScore" } })
+      .exec();
+
+    return res.status(200).json({
+      message: "Search results retrieved successfully",
+      data: { searchResult: searchResult },
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   createNote,
   getNotes,
@@ -172,4 +198,5 @@ module.exports = {
   updateNoteById,
   deleteNoteById,
   shareNoteById,
+  searchNotes,
 };
