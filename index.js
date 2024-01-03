@@ -2,19 +2,17 @@ const express = require("express");
 const dotenv = require("dotenv");
 const db = require("./config/mongoose");
 const passport = require("passport");
+const apiLimiter = require("./config/rateLimiter");
 
 // Load environment variables
 dotenv.config();
-
-const passportJWT = require("./config/jwt-passport.config");
-
+const passportJWT = require("./config/jwtPassport");
 const app = express();
 const port = process.env.PORT;
 
 app.use(express.json());
-
 app.use(passport.initialize());
-app.use("/", require("./routes"));
+app.use("/", apiLimiter, require("./routes"));
 
 // Start express server
 app.listen(port, (error) => {
