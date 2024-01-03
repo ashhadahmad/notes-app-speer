@@ -6,6 +6,7 @@ const {
   getNoteById,
   updateNoteById,
   deleteNoteById,
+  shareNoteById,
 } = require("../../controller/api/notes.controller.js");
 const passport = require("passport");
 
@@ -27,4 +28,10 @@ router.delete(
   passport.authenticate("jwt", { session: false }),
   deleteNoteById
 );
+router.post(
+  "/:id/share",
+  passport.authenticate("jwt", { session: false }),
+  shareNoteById
+);
+
 module.exports = router;

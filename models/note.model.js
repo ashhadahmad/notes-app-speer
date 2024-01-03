@@ -10,6 +10,12 @@ const noteSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    shared: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,
