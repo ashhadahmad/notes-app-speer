@@ -5,10 +5,13 @@ const jwt = require("jsonwebtoken");
 // Create a new user
 const signUp = async function (req, res) {
   try {
+    if (!req.body || !req.body.email || !req.body.password || !req.body.name)
+      return res.status(400).json({ message: "Missing details" });
+
     // Check if user already exists
     const user = await User.findOne({ email: req.body.email }).exec();
     if (user)
-      return res.status(409).json({
+      return res.status(400).json({
         message: "User already exists.",
       });
     // User does not exist, create it
@@ -22,6 +25,11 @@ const signUp = async function (req, res) {
       await newUser.save();
       return res.status(200).json({
         message: "User created successfully",
+        data: {
+          user: {
+            _id: newUser._id,
+          },
+        },
       });
     }
   } catch (err) {
@@ -35,6 +43,8 @@ const signUp = async function (req, res) {
 // Sign in and get the session
 const signIn = async function (req, res) {
   try {
+    if (!req.body.email || !req.body.password)
+      return res.status(400).json({ message: "Missing email or password" });
     const user = await User.findOne({ email: req.body.email });
     // User does not exist
     if (!user) {
@@ -42,7 +52,6 @@ const signIn = async function (req, res) {
         message: "User not found",
       });
     }
-
     // User exists, compare passwords
     if (bcrypt.compareSync(req.body.password, user.password)) {
       return res.status(200).json({
@@ -63,13 +72,12 @@ const signIn = async function (req, res) {
     // Password Mismatch
     else {
       return res.status(401).json({
-        message: "Invalid password",
+        message: "Invalid credentials",
       });
     }
   } catch (err) {
-    console.log(err);
     return res.json(500, {
-      message: "Server error",
+      message: err.message,
     });
   }
 };
