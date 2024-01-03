@@ -2,11 +2,11 @@ const passport = require("passport");
 const JWTStrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
 
-const User = require("../models/user");
+const User = require("../models/user.model");
 
 let opts = {
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey: env.jwt_secret,
+  secretOrKey: process.env.JWT_SECRET,
 };
 
 passport.use(
@@ -18,7 +18,7 @@ passport.use(
         done(null, false);
       }
     } catch (err) {
-      console.log("Error : ", err);
+      console.log("[server] Error : ", err);
       return;
     }
   })

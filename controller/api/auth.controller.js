@@ -1,11 +1,6 @@
 const bcrypt = require("bcrypt");
-const User = require("../../models/user");
+const User = require("../../models/user.model");
 const jwt = require("jsonwebtoken");
-
-const hello = (req, res) =>
-  res.json(200, {
-    message: "Hello from controller auth",
-  });
 
 // Create a new user
 const signUp = async function (req, res) {
@@ -51,7 +46,7 @@ const signIn = async function (req, res) {
     // User exists, compare passwords
     if (bcrypt.compareSync(req.body.password, user.password)) {
       return res.status(200).json({
-        message: "Success, here is your token",
+        message: "Authentication successful",
         data: {
           token: jwt.sign(
             {
@@ -80,7 +75,6 @@ const signIn = async function (req, res) {
 };
 
 module.exports = {
-  hello,
   signUp,
   signIn,
 };
