@@ -1,0 +1,11 @@
+{
+  "name": "notes-app-speer",
+  "version": "1.0.0",
+  "description": "notes app for backend assessment speer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ashhad",
+  "license": "ISC"
+}
