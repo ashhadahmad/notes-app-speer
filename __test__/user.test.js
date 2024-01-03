@@ -46,14 +46,14 @@ describe("User Routes", () => {
         password: "newpassword",
       });
 
-      expect(res.status).toBe(400); // Adjust the expected status code based on your error handling
+      expect(res.status).toBe(400);
       expect(res.body.message).toContain("User already exists.");
     });
 
     it("should not register a user without an email or password", async () => {
       const res = await request(app).post("/api/auth/signup").send({});
 
-      expect(res.status).toBe(400); // Adjust the expected status code based on your error handling
+      expect(res.status).toBe(400);
       expect(res.body.message).toContain("Missing details");
     });
   });
@@ -75,17 +75,15 @@ describe("User Routes", () => {
         password: "wrongpassword",
       });
 
-      expect(res.status).toBe(401); // Adjust the expected status code based on your error handling
+      expect(res.status).toBe(401);
       expect(res.body.message).toContain("Invalid credentials");
     });
 
     it("should not login without an email or password", async () => {
       const res = await request(app).post("/api/auth/login").send({});
 
-      expect(res.status).toBe(400); // Adjust the expected status code based on your error handling
+      expect(res.status).toBe(400);
       expect(res.body.message).toContain("Missing email or password");
     });
   });
-
-  // Add more test cases for other user routes
 });
